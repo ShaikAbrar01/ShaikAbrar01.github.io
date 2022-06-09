@@ -10,87 +10,131 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <title>Random Advice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://kit.fontawesome.com/0c2ac74488.js" crossorigin="anonymous"></script>
+    <title>Advice</title>
     <style>
-        body {
+        .hr-text {
+            line-height: 1em;
+            position: relative;
+            outline: 0;
+            border: 0;
+            color: black;
             text-align: center;
-            
+            height: 1.5em;
+            opacity: .5;
         }
-        .card {
-            margin: 15px 15px 15px 15px;    
-        }
-        button {
-            margin: 2%;
-        }
-        h1 {
-            padding-top:5px; 
-        }
-
+            .hr-text:before {
+              content: '';
+              background: linear-gradient(to right, transparent, #818078, transparent);
+              position: absolute;
+              left: 0;
+              top: 50%;
+              width: 100%;
+              height: 1px;
+          }
+            .hr-text:after {
+              content: attr(data-content);
+              position: relative;
+              display: inline-block;
+              color: black;
+              padding: 0 .5em;
+              line-height: 1.5em;
+              color: #818078;
+              background-color: #fcfcfa;
+            }
     </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index.html">Shaik Abrar</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="news.html">News</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="advice.html">Advices</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="joke.html">Jokes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="contests.html">Contests</a>
-          </li>
-        </ul>
-        
-      </div>
-    </div>
-  </nav>
-    <h1>Random Advice</h1>
-    <button type="button" class="btn btn-success" onclick="show()">Click here for next Advice</button>
-
+  <div class="container">
+    <h1 class="text-center mt-3 mb-3"><i class="fa-regular fa-lightbulb"></i> Advices</h1>
+    <hr>
+  </div>
     
-    <div class="card">
-        <div class="card-header">
-          Advice
-        </div>
+
+    <div class="container-lg text-center mt-4">
+      <h4 class="text-center mt-3 mb-3"><i class="fa-solid fa-shuffle"></i> Get a random advice</h4>
+      <div class="card">
         <div class="card-body">
           <blockquote class="blockquote mb-0">
             <p id="advice">Be Open To Advice From Anyone... But Never Act On Advice Blindly...</p>
           </blockquote>
         </div>
       </div>
-      <footer class="bg-light text-center text-lg-start fixed-bottom">
+      <button type="button" class="btn btn-warning mt-3" onclick="show()"><i class="fa-solid fa-circle-arrow-right"></i> Next Advice</button>
+    </div>
+    <hr class="hr-text" data-content="OR">
+    <div class="container text-center">
+      <h4 class="text-center mt-3 mb-3"><i class="fa-solid fa-magnifying-glass"></i> Search advice with a keyword</h4>
+      <div class=" mb-3">
+            <input type="text" class="form-control w-100" placeholder="Enter a keyword to search" id="query">
+            <button class="btn btn-success mt-3" onclick="getAdvice()"><i class="fa-brands fa-searchengin"></i> Search</button>
+      </div>
+    </div>
+    <div class="container mb-5" id="tag">
+        <h5 class="text-center">Your results will be displayed here..</h5>
+    </div>
+
+
+
+
+
+
+      <footer class="bg-light text-center text-lg-start" >
         <!-- Copyright -->
-        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05); padding-top: 60px;">
           © 2022 Copyright:
           <a class="text-reset fw-bold" href="index.html" style="text-decoration: none;">Shaik Mohammad Abrar</a>
         </div>
         <!-- Copyright -->
       </footer>
     <script>
-        var id = 1
+        function getAdvice() {
+          var query = document.getElementById('query').value
+          var url = new URL("https://api.adviceslip.com/advice/search/"+query)
+          $.getJSON(url , function(data) {
+            console.log(data)
+            var content = document.getElementById('tag')
+            if(data.message || data.slips.length === 0) {
+              content.innerHTML = '<p class="text-center">No advices found for ' + query + '.. Please try another keyword</p>'
+            }
+            var all_advices = ``
+              data.slips.forEach(advice => {
+              const single_advice = `
+              <div class="card mb-2">
+                <div class="card-body">
+                  <blockquote class="blockquote mb-0">
+                    <p id="advice">${advice.advice}</p>
+                  </blockquote>
+                </div>
+              </div>
+              `
+              console.log(advice.advice)
+              all_advices += single_advice
+            });
+            
+          if(all_advices === '') {
+            content.innerHTML = 'No advices found for ' + query
+          } else {
+            content.innerHTML = all_advices 
+          }
+            }
+            
+          )
+          
+          
+        }
         function show() {
+            var id = 1
             var id_str = id.toString()
             var url = new URL("https://api.adviceslip.com/advice?id=1")
-            console.log(url)
+            // console.log(url)
             url.searchParams.set('id',id_str)
             $.getJSON(url,function(data) {
                 $('#advice').text(data.slip.advice)
             })
-            id += 1;
         }
+        show()
     </script>
 </body>
 </html>
